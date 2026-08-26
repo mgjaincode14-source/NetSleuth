@@ -72,6 +72,18 @@ Thumbs.db
 # local env files
 .env
 
+# Sensitive keys and credentials
+*.pem
+*.key
+*.p12
+id_rsa
+id_rsa.pub
+credentials.json
+.aws/
+*.secret
+secrets/
+
+
 # sqlite
 *.sqlite3
 
