@@ -13,9 +13,10 @@ Each phase is self-contained with its own educational guide, code modules, and t
 | Phase Directory | Title | Core Focus | Status |
 |---|---|---|---|
 | [`phase_01_networking_fundamentals/`](./phase_01_networking_fundamentals/) | **Networking Fundamentals & Setup** | Packets, IP/MAC, TCP/UDP, Ports, Headers & Environment Setup | ✅ Complete |
-| [`phase_02_packet_capture_engine/`](./phase_02_packet_capture_engine/) | **Packet Capture Engine** | Scapy Async Sniffing, Interface Discovery, Start/Stop & Simulator | ✅ Complete |
-| `phase_03_packet_parser/` | **Deep Packet Parser** | L2-L7 Extraction, TCP Flags, DNS/HTTP metadata, Pydantic Models | ⏳ Next |
-| `phase_04_realtime_dashboard/` | **Real-Time Dashboard** | FastAPI WebSockets + React Tailwind Dashboard | ⏳ Planned |
+| [`phase_02_packet_capture_engine/`](./phase_02_packet_capture_engine/) | **Packet Capture Engine** | Scapy Async Sniffing, Directions, TCP Flags, Real-Time & Simulator | ✅ Complete |
+| [`phase_03_packet_parser/`](./phase_03_packet_parser/) | **Deep Packet Parser** | L2-L7 Extraction, 5-Tuple Flow Keys, DNS/HTTP/ICMP Metadata & Payload | ✅ Complete |
+| `phase_04_realtime_dashboard/` | **Real-Time Dashboard** | FastAPI WebSockets + React Tailwind Dashboard | ⏳ Next |
+
 | `phase_05_traffic_analytics/` | **Traffic Analytics** | Flow Reconstruction (5-Tuple), Bandwidth & Top Talkers | ⏳ Planned |
 | `phase_06_threat_detection/` | **Threat Detection Engine** | Rule-based detection (Port Scan, SYN Flood, Ping Flood) | ⏳ Planned |
 | `phase_07_machine_learning/` | **ML Anomaly Detection** | IsolationForest / XGBoost flow anomaly scoring | ⏳ Planned |
