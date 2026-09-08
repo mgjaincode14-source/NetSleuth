@@ -11,7 +11,7 @@ import argparse
 # Add root project directory to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from phase_03_packet_parser.cli import run_parser_cli
+from phase_03_packet_parser.parser_cli import run_parser_cli
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="NetSleuth AI - Phase 3 Packet Parser Runner")

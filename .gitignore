@@ -96,3 +96,27 @@ coverage/
 
 # Packet capture engine artifacts (if any)
 *.pcap
+
+# Archive files (tar, zip, etc.)
+*.tar
+*.tar.gz
+*.tar.xz
+*.zip
+*.rar
+
+# Node.js / Frontend dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+
+# IDE and editor files
+*.swp
+*.swo
+*~
+.DS_Store
