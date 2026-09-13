@@ -25,6 +25,13 @@ async def lifespan(app: FastAPI):
     engine = get_global_engine()
     broadcast_service.attach_engine(engine)
 
+    # Automatically start capture engine (live network interface or simulation fallback)
+    if not engine.is_running:
+        try:
+            engine.start(simulate_if_permission_denied=True)
+        except Exception as e:
+            print(f"[ENGINE STARTUP NOTICE] {e}")
+
     # Start background stats broadcasting task
     broadcast_task = asyncio.create_task(broadcast_service.start_broadcasting())
 
@@ -35,6 +42,7 @@ async def lifespan(app: FastAPI):
     broadcast_task.cancel()
     if engine.is_running:
         engine.stop()
+
 
 
 app = FastAPI(

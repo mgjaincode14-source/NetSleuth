@@ -16,7 +16,9 @@ Each phase is self-contained with its own educational guide, code modules, and t
 | [`phase_02_packet_capture_engine/`](./phase_02_packet_capture_engine/) | **Packet Capture Engine** | Scapy Async Sniffing, Directions, TCP Flags, Real-Time & Simulator | ✅ Complete |
 | [`phase_03_packet_parser/`](./phase_03_packet_parser/) | **Deep Packet Parser** | L2-L7 Extraction, 5-Tuple Flow Keys, DNS/HTTP/ICMP Metadata & Payload | ✅ Complete |
 | [`phase_04_realtime_dashboard/`](./phase_04_realtime_dashboard/) | **Real-Time Web Dashboard** | FastAPI WebSockets + React Breeze Theme Dashboard | ✅ Complete |
-| `phase_05_traffic_analytics/` | **Traffic Analytics** | Flow Reconstruction (5-Tuple), Bandwidth & Top Talkers | ⏳ Next |
+| [`phase_05_traffic_analytics/`](./phase_05_traffic_analytics/) | **Traffic Analytics Engine** | Stateful 5-Tuple Flows, TCP State Machine, Bandwidth & Top Talkers | ✅ Complete |
+| `phase_06_threat_detection/` | **Threat Detection Engine** | Rule-based detection (Port Scan, SYN Flood, Ping Flood) | ⏳ Next |
+
 
 
 | `phase_05_traffic_analytics/` | **Traffic Analytics** | Flow Reconstruction (5-Tuple), Bandwidth & Top Talkers | ⏳ Planned |

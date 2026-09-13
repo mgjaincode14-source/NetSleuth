@@ -14,8 +14,8 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 def main():
     parser = argparse.ArgumentParser(description="NetSleuth AI - Master Unified Runner")
     parser.add_argument(
-        "-p", "--phase", type=int, choices=[2, 3], default=3,
-        help="Phase to execute (2: Packet Capture Engine, 3: Deep Packet Parser) [Default: 3]"
+        "-p", "--phase", type=int, choices=[2, 3, 4, 5], default=5,
+        help="Phase to execute (2: Capture Engine, 3: Packet Parser, 4: Web Dashboard, 5: Traffic Analytics) [Default: 5]"
     )
     parser.add_argument("-i", "--interface", type=str, default=None, help="Network interface (e.g., wlp8s0, lo)")
     parser.add_argument("-f", "--filter", type=str, default=None, help="BPF filter string (e.g., 'tcp port 80')")
@@ -48,6 +48,20 @@ def main():
             packet_limit=args.count,
             clear_screen=not args.no_clear,
         )
+    elif args.phase == 4:
+        from phase_04_realtime_dashboard.run_dashboard import main as run_dash
+        run_dash()
+    elif args.phase == 5:
+        from phase_05_traffic_analytics.cli import run_analytics_cli
+        run_analytics_cli(
+            interface=args.interface,
+            bpf_filter=args.filter,
+            simulation_mode=args.simulate,
+            duration=args.duration,
+            packet_limit=args.count,
+            clear_screen=not args.no_clear,
+        )
+
 
 
 if __name__ == "__main__":

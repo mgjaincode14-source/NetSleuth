@@ -49,33 +49,34 @@ class ProtocolAnalyzer :
             return "INCOMING"
         return "INCOMING"
 
-    def parse_tcp_flags (self ,flags_val )->tuple [str ,str ]:
+    def parse_tcp_flags(self, flags_val) -> tuple[str, str]:
         """
         Parse TCP flag combination and return (flag_name_str, handshake_state).
         Flags string can contain F(FIN), S(SYN), R(RST), P(PSH), A(ACK), U(URG), E(ECE), C(CWR).
         """
-        flags_str =str (flags_val )
-        flag_names =[]
+        flags_str = str(flags_val)
+        flag_names = []
 
-        if "S"in flags_str and "A"in flags_str :
-            flag_names .append ("SYN-ACK")
-        elif "S"in flags_str :
-            flag_names .append ("SYN")
-        elif "F"in flags_str and "A"in flags_str :
-            flag_names .append ("FIN-ACK")
-        elif "F"in flags_str :
-            flag_names .append ("FIN")
-        elif "R"in flags_str :
-            flag_names .append ("RST")
-        elif "P"in flags_str and "A"in flags_str :
-            flag_names .append ("PSH-ACK")
-        elif "A"in flags_str :
-            flag_names .append ("ACK")
-        else :
-            flag_names .append (flags_str if flags_str else "NONE")
+        if "S" in flags_str and "A" in flags_str:
+            flag_names.append("SYN-ACK")
+        elif "S" in flags_str:
+            flag_names.append("SYN")
+        elif "F" in flags_str and "A" in flags_str:
+            flag_names.append("FIN-ACK")
+        elif "F" in flags_str:
+            flag_names.append("FIN")
+        elif "R" in flags_str:
+            flag_names.append("RST")
+        elif "P" in flags_str and "A" in flags_str:
+            flag_names.append("PSH-ACK")
+        elif "A" in flags_str:
+            flag_names.append("ACK")
+        else:
+            flag_names.append(flags_str if flags_str else "NONE")
 
-        combined ="-".join (flag_names )
-        return flags_str ,combined 
+        combined = "-".join(flag_names)
+        return flags_str, combined
+
 
     def analyze (self ,pkt :Packet )->AnalyzedPacket :
         """Perform deep inspection of a packet and return an AnalyzedPacket object."""

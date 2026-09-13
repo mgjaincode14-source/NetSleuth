@@ -37,7 +37,7 @@ class ConnectionManager:
             return
 
         dead_sockets = set()
-        msg_text = json.dumps(data)
+        msg_text = json.dumps(data, default=str)
 
         async with self._lock:
             for connection in self.active_connections:
@@ -58,35 +58,32 @@ class DashboardBroadcastService:
         self.engine: Optional[PacketCaptureEngine] = None
         self.parser: Optional[PacketParser] = None
         self._loop: Optional[asyncio.AbstractEventLoop] = None
-        self._broadcast_task: Optional[asyncio.Task] = None
         self.is_running = False
 
     def attach_engine(self, engine: PacketCaptureEngine):
         """Attach Phase 2 capture engine and Phase 3 packet parser."""
         self.engine = engine
         self.parser = PacketParser(local_ips=engine.local_ips)
-
-        # Register subscriber callback
         self.engine.add_subscriber(self._on_packet_received)
 
     def _on_packet_received(self, pkt):
         """Thread-safe callback invoked whenever a packet is captured."""
-        if not self.parser or not self.is_running or not self._loop:
+        if not self.parser or not self._loop:
             return
 
         try:
             parsed: ParsedPacket = self.parser.parse(pkt)
             packet_payload = {
                 "type": "packet",
-                "data": parsed.model_dump()
+                "data": parsed.model_dump(mode="json")
             }
             # Schedule broadcast on asyncio event loop
             asyncio.run_coroutine_threadsafe(
                 self.ws_manager.broadcast_json(packet_payload),
                 self._loop
             )
-        except Exception:
-            pass
+        except Exception as err:
+            print(f"[WS BROADCAST ERROR] {err}")
 
     async def start_broadcasting(self):
         """Start periodic metrics broadcast loop (2 updates per second)."""
@@ -98,7 +95,7 @@ class DashboardBroadcastService:
                 stats: CaptureStats = self.engine.get_stats()
                 stats_payload = {
                     "type": "stats",
-                    "data": stats.model_dump()
+                    "data": stats.model_dump(mode="json")
                 }
                 await self.ws_manager.broadcast_json(stats_payload)
 
@@ -106,3 +103,4 @@ class DashboardBroadcastService:
 
     def stop_broadcasting(self):
         self.is_running = False
+
