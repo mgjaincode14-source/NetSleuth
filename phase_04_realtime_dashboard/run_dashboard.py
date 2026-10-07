@@ -35,7 +35,7 @@ def main():
     parser.add_argument("--host", type=str, default="0.0.0.0", help="Host to bind (default: 0.0.0.0)")
     parser.add_argument("--port", type=int, default=8000, help="Port to bind (default: 8000)")
     parser.add_argument("--no-build", action="store_true", help="Skip automatic frontend build step")
-    args = parser.parse_args()
+    args = parser.parse_known_args()[0]
 
     if not args.no_build:
         try:
