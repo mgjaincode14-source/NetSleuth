@@ -89,12 +89,15 @@ class FlowTracker:
         else:
             # Create new flow entry
             initial_state = FlowState.NEW
-            if fk.protocol == "TCP":
+            is_tcp = (fk.protocol == "TCP") or bool(parsed.l4 and parsed.l4.tcp_flags_dict)
+            if is_tcp:
                 initial_state = FlowState.SYN_SENT if (parsed.l4 and parsed.l4.tcp_flags_dict.get("SYN")) else FlowState.ESTABLISHED
-            elif fk.protocol == "UDP" or fk.protocol in ["DNS", "HTTP", "HTTPS"]:
-                initial_state = FlowState.UDP_ACTIVE if fk.protocol == "UDP" else FlowState.OTHER_ACTIVE
+            elif fk.protocol == "UDP" or fk.protocol == "DNS":
+                initial_state = FlowState.UDP_ACTIVE
             elif fk.protocol == "ICMP":
                 initial_state = FlowState.ICMP_ACTIVE
+            else:
+                initial_state = FlowState.OTHER_ACTIVE
 
             flow = NetworkFlow(
                 flow_id=fwd_id,

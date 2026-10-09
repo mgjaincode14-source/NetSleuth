@@ -102,3 +102,28 @@ def clear_buffer() -> Dict[str, Any]:
     engine = get_global_engine()
     engine.clear_buffer()
     return {"status": "cleared"}
+
+
+@router.get("/analytics")
+def get_analytics() -> Dict[str, Any]:
+    """Retrieve Phase 5 flow and bandwidth analytics snapshot."""
+    from phase_04_realtime_dashboard.backend.app.ws_manager import get_broadcast_service
+    service = get_broadcast_service()
+    if service and service.analytics_engine:
+        snapshot = service.analytics_engine.get_snapshot()
+        return snapshot.model_dump()
+    return {"status": "analytics_engine_not_ready"}
+
+
+@router.get("/alerts")
+def get_alerts() -> Dict[str, Any]:
+    """Retrieve Phase 6 detected threat alerts."""
+    from phase_04_realtime_dashboard.backend.app.ws_manager import get_broadcast_service
+    service = get_broadcast_service()
+    if service and service.threat_detector:
+        alerts = [alert.model_dump() for alert in service.threat_detector.alerts]
+        return {
+            "total_alerts": len(alerts),
+            "alerts": alerts,
+        }
+    return {"total_alerts": 0, "alerts": []}

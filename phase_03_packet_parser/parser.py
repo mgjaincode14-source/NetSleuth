@@ -254,3 +254,6 @@ class PacketParser:
             payload_ascii=payload_ascii,
             anomaly_tag=anomaly_tag,
         )
+
+    # Alias for cross-phase interoperability
+    parse_packet = parse

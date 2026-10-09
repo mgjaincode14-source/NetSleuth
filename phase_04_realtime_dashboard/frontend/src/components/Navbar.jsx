@@ -11,6 +11,15 @@ export default function Navbar({ stats, onStart, onStop, onClear, isConnected })
     fetchInterfaces();
   }, []);
 
+  useEffect(() => {
+    if (stats?.simulation_mode !== undefined) {
+      setSimulationMode(stats.simulation_mode);
+    }
+    if (stats?.active_interface) {
+      setSelectedInterface(stats.active_interface);
+    }
+  }, [stats?.simulation_mode, stats?.active_interface]);
+
   const fetchInterfaces = async () => {
     try {
       const res = await fetch('/api/v1/interfaces');
@@ -89,15 +98,21 @@ export default function Navbar({ stats, onStart, onStop, onClear, isConnected })
           ))}
         </select>
 
-        {/* Mode Toggle */}
+        {/* Mode Toggle & Status */}
         <button
           className="breeze-btn breeze-btn-secondary"
           onClick={() => setSimulationMode(!simulationMode)}
           disabled={stats?.is_running}
-          title="Toggle between Live Real-Time Network Socket and Synthetic Simulator"
+          title={
+            stats?.simulation_mode
+              ? "Running in Simulation Mode (Run with sudo to capture live network packets)"
+              : "Running in Live Network Sniffing Mode"
+          }
         >
           <Layers size={16} />
-          {simulationMode ? "Mode: Simulation" : "Mode: Live Socket"}
+          {stats?.is_running
+            ? (stats.simulation_mode ? "Mode: Simulation" : "Mode: Live Socket")
+            : (simulationMode ? "Mode: Simulation" : "Mode: Live Socket")}
         </button>
 
         {/* Clear Buffer */}

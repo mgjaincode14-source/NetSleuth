@@ -173,32 +173,41 @@ class PacketCaptureEngine :
             return 
 
 
-        try :
-            kwargs :Dict [str ,Any ]={
-            "prn":self ._on_packet_received ,
-            "store":False ,
-            "promisc":promiscuous ,
-            }
-            if self .interface :
-                kwargs ["iface"]=self .interface 
-            if self .bpf_filter :
-                kwargs ["filter"]=self .bpf_filter 
-            if packet_limit :
-                kwargs ["count"]=packet_limit 
+        # On Wi-Fi interfaces in station mode, promiscuous mode can fail or drop packets; disable promisc for Wi-Fi
+        if self.interface and any(p in self.interface.lower() for p in ["wl", "wifi", "wlan"]):
+            promiscuous = False
 
-            self ._sniffer =AsyncSniffer (**kwargs )
-            self ._sniffer .start ()
-        except (PermissionError ,OSError )as e :
-            if simulate_if_permission_denied :
-                self .simulation_mode =True 
-                self ._start_simulation (packet_limit )
-            else :
-                self .is_running =False 
-                raise PermissionError (
-                f"Real-time packet capture on interface '{self .interface }' failed: {e }.\n"
-                f"Raw socket sniffing requires root privileges on Linux.\n"
-                f"Run with sudo: sudo ./venv/bin/python phase_02_packet_capture_engine/run_capture.py\n"
-                f"Or pass --simulate to run synthetic traffic generator."
+        try:
+            kwargs: Dict[str, Any] = {
+                "prn": self._on_packet_received,
+                "store": False,
+                "promisc": promiscuous,
+            }
+            if self.interface:
+                kwargs["iface"] = self.interface
+            if self.bpf_filter:
+                kwargs["filter"] = self.bpf_filter
+            if packet_limit:
+                kwargs["count"] = packet_limit
+
+            self._sniffer = AsyncSniffer(**kwargs)
+            self._sniffer.start()
+        except (PermissionError, OSError) as e:
+            if simulate_if_permission_denied:
+                print(f"\n[WARNING] Live raw socket capture on '{self.interface}' denied: {e}")
+                print("           Raw packet sniffing requires root/administrator privileges on Linux.")
+                print("           Falling back to high-fidelity Simulation Mode.")
+                print("           To capture real live network packets, run: sudo python run.py")
+                print("           Or grant capability: sudo setcap cap_net_raw,cap_net_admin=eip $(readlink -f ./venv/bin/python)\n")
+                self.simulation_mode = True
+                self._start_simulation(packet_limit)
+            else:
+                self.is_running = False
+                raise PermissionError(
+                    f"Real-time packet capture on interface '{self.interface}' failed: {e}.\n"
+                    f"Raw socket sniffing requires root privileges on Linux.\n"
+                    f"Run with sudo: sudo python run.py\n"
+                    f"Or pass --simulate to run synthetic traffic generator."
                 )
 
     def _start_simulation (self ,packet_limit :Optional [int ]=None ):

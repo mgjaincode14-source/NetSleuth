@@ -40,8 +40,19 @@ def test_start_stop_capture_endpoint():
 
 
 def test_websocket_connection():
-    with client.websocket_connect("/ws/dashboard") as websocket:
-        # Wait for stats or packet message
-        data = websocket.receive_json()
-        assert "type" in data
-        assert data["type"] in ["stats", "packet"]
+    with TestClient(app) as test_client:
+        with test_client.websocket_connect("/ws/dashboard") as websocket:
+            # Wait for stats or packet message
+            data = websocket.receive_json()
+            assert "type" in data
+            assert data["type"] in ["stats", "packet", "analytics", "alert"]
+
+
+def test_analytics_and_alerts_endpoints():
+    with TestClient(app) as test_client:
+        res_analytics = test_client.get("/api/v1/analytics")
+        assert res_analytics.status_code == 200
+
+        res_alerts = test_client.get("/api/v1/alerts")
+        assert res_alerts.status_code == 200
+        assert "alerts" in res_alerts.json()

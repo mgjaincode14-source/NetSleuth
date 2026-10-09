@@ -1,4 +1,4 @@
-# NetSleuth AI 🔍📡
+# NetSleuth AI
 
 **AI-Powered Real-Time Network Monitoring & Threat Detection Platform**
 
@@ -6,49 +6,50 @@ NetSleuth AI is a real-time network monitoring and cybersecurity intelligence pl
 
 ---
 
-## 🧭 Project Roadmap & Phase-Wise Structure
+## Project Structure & Phases
 
-Each phase is self-contained with its own educational guide, code modules, and tests:
+The project is structured into modular phases:
 
-| Phase Directory | Title | Core Focus | Status |
-|---|---|---|---|
-| [`phase_01_networking_fundamentals/`](./phase_01_networking_fundamentals/) | **Networking Fundamentals & Setup** | Packets, IP/MAC, TCP/UDP, Ports, Headers & Environment Setup | ✅ Complete |
-| [`phase_02_packet_capture_engine/`](./phase_02_packet_capture_engine/) | **Packet Capture Engine** | Scapy Async Sniffing, Directions, TCP Flags, Real-Time & Simulator | ✅ Complete |
-| [`phase_03_packet_parser/`](./phase_03_packet_parser/) | **Deep Packet Parser** | L2-L7 Extraction, 5-Tuple Flow Keys, DNS/HTTP/ICMP Metadata & Payload | ✅ Complete |
-| [`phase_04_realtime_dashboard/`](./phase_04_realtime_dashboard/) | **Real-Time Web Dashboard** | FastAPI WebSockets + React Breeze Theme Dashboard | ✅ Complete |
-| [`phase_05_traffic_analytics/`](./phase_05_traffic_analytics/) | **Traffic Analytics Engine** | Stateful 5-Tuple Flows, TCP State Machine, Bandwidth & Top Talkers | ✅ Complete |
-| `phase_06_threat_detection/` | **Threat Detection Engine** | Rule-based detection (Port Scan, SYN Flood, Ping Flood) | ⏳ Next |
-
-
-
-| `phase_05_traffic_analytics/` | **Traffic Analytics** | Flow Reconstruction (5-Tuple), Bandwidth & Top Talkers | ⏳ Planned |
-| `phase_06_threat_detection/` | **Threat Detection Engine** | Rule-based detection (Port Scan, SYN Flood, Ping Flood) | ⏳ Planned |
-| `phase_07_machine_learning/` | **ML Anomaly Detection** | IsolationForest / XGBoost flow anomaly scoring | ⏳ Planned |
-| `phase_08_ai_assistant/` | **AI Threat Assistant** | Groq + LangChain Agent with tool calling & plain-English advice | ⏳ Planned |
-| `phase_09_report_generation/` | **Security Report Generator** | Automated PDF / JSON export of security audits | ⏳ Planned |
-| `phase_10_deployment/` | **Deployment & Docker** | Production Docker Compose orchestration | ⏳ Planned |
+| Phase Directory | Title | Core Focus |
+|---|---|---|
+| `phase_01_networking_fundamentals/` | **Networking Fundamentals & Setup** | Packets, IP/MAC, TCP/UDP, Ports, Headers & Environment Setup |
+| `phase_02_packet_capture_engine/` | **Packet Capture Engine** | Scapy Async Sniffing, Directions, TCP Flags, Real-Time & Simulator |
+| `phase_03_packet_parser/` | **Deep Packet Parser** | L2-L7 Extraction, 5-Tuple Flow Keys, DNS/HTTP/ICMP Metadata & Payload |
+| `phase_04_realtime_dashboard/` | **Real-Time Web Dashboard** | FastAPI WebSockets + React Dashboard |
+| `phase_05_traffic_analytics/` | **Traffic Analytics Engine** | Stateful 5-Tuple Flows, TCP State Machine, Bandwidth & Top Talkers |
+| `phase_06_threat_detection/` | **Threat Detection Engine** | Rule-based detection (Port Scan, SYN Flood, Ping Flood) |
+| `phase_07_machine_learning/` | **ML Anomaly Detection** | IsolationForest / XGBoost flow anomaly scoring (Planned) |
+| `phase_08_ai_assistant/` | **AI Threat Assistant** | Groq + LangChain Agent with tool calling (Planned) |
+| `phase_09_report_generation/` | **Security Report Generator** | Automated PDF / JSON export of security audits (Planned) |
+| `phase_10_deployment/` | **Deployment & Docker** | Production Docker Compose orchestration (Planned) |
 
 ---
 
-## ⚡ Quick Start
+## How to Run
 
-### 1. Set Up Virtual Environment & Dependencies
+NetSleuth AI includes a universal orchestrator that automatically manages your virtual environment, elevates privileges if necessary for live packet capture, detects active interfaces, and launches the entire system simultaneously.
+
+### Start the Platform
+
+Run the following command from the root directory of the project:
+
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r phase_01_networking_fundamentals/requirements.txt
+python run.py
 ```
 
-### 2. Verify Environment
-```bash
-python phase_01_networking_fundamentals/test_environment.py
-```
+This single command will:
+1. Automatically switch to the project's Python virtual environment.
+2. Request `sudo` privileges if needed for live interface sniffing (on Linux/macOS).
+3. Start the FastAPI backend and WebSocket manager.
+4. Begin the asynchronous background packet capture (Live Mode or Simulation).
+5. Serve the real-time React dashboard.
 
-### 3. Run Phase 2 Packet Capture Engine
-```bash
-# Run real-time capture monitor (Simulated traffic or Live interface)
-python phase_02_packet_capture_engine/run_capture.py --simulate
+The dashboard will be available at: localhost
 
-# Run automated tests
-pytest phase_02_packet_capture_engine/tests/ -v
+### Running Tests
+
+To run the full test suite across all completed phases:
+
+```bash
+pytest
 ```

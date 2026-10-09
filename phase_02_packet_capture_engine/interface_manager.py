@@ -91,27 +91,50 @@ class InterfaceManager :
 
         return list (interfaces .values ())
 
-    @classmethod 
-    def get_default_interface (cls )->Optional [InterfaceInfo ]:
+    @classmethod
+    def get_default_interface(cls) -> Optional[InterfaceInfo]:
         """Find the best active non-loopback interface with an IPv4 address, or fallback to loopback."""
-        all_ifaces =cls .get_all_interfaces ()
+        all_ifaces = cls.get_all_interfaces()
 
+        # 1. Query OS default gateway route via Scapy (highest accuracy on Linux/Windows/macOS)
+        try:
+            route = conf.route.route("8.8.8.8")
+            if route and len(route) >= 1:
+                gw_iface_name = route[0]
+                for iface in all_ifaces:
+                    if iface.name == gw_iface_name and iface.is_up:
+                        return iface
+        except Exception:
+            pass
 
-        for iface in all_ifaces :
-            if iface .is_up and not iface .is_loopback and len (iface .ipv4_addresses )>0 :
-                return iface 
+        # 2. Query socket routing table for outbound local IP
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            outbound_ip = s.getsockname()[0]
+            s.close()
+            for iface in all_ifaces:
+                if outbound_ip in iface.ipv4_addresses and iface.is_up and not iface.is_loopback:
+                    return iface
+        except Exception:
+            pass
 
+        # 3. Fallback: First active non-loopback interface with an IPv4 address
+        for iface in all_ifaces:
+            if iface.is_up and not iface.is_loopback and len(iface.ipv4_addresses) > 0:
+                return iface
 
-        for iface in all_ifaces :
-            if iface .is_up and not iface .is_loopback :
-                return iface 
+        # 4. Fallback: First active non-loopback interface
+        for iface in all_ifaces:
+            if iface.is_up and not iface.is_loopback:
+                return iface
 
+        # 5. Fallback: Loopback interface
+        for iface in all_ifaces:
+            if iface.is_loopback:
+                return iface
 
-        for iface in all_ifaces :
-            if iface .is_loopback :
-                return iface 
-
-        return all_ifaces [0 ]if all_ifaces else None 
+        return all_ifaces[0] if all_ifaces else None
 
 
 if __name__ =="__main__":

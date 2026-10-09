@@ -11,7 +11,7 @@ import argparse
 
 sys .path .insert (0 ,os .path .abspath (os .path .join (os .path .dirname (__file__ ),"..")))
 
-from phase_02_packet_capture_engine .cli import run_cli 
+from phase_02_packet_capture_engine.capture_cli import run_cli
 
 if __name__ =="__main__":
     parser =argparse .ArgumentParser (description ="NetSleuth AI - Phase 2 Packet Sniffer")

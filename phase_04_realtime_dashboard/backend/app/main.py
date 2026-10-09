@@ -13,10 +13,11 @@ from fastapi.responses import FileResponse
 
 from phase_04_realtime_dashboard.backend.app.api.rest import router as rest_router, get_global_engine
 from phase_04_realtime_dashboard.backend.app.api.websocket import router as ws_router, ws_manager
-from phase_04_realtime_dashboard.backend.app.ws_manager import DashboardBroadcastService
+from phase_04_realtime_dashboard.backend.app.ws_manager import DashboardBroadcastService, set_broadcast_service
 
 
 broadcast_service = DashboardBroadcastService(ws_manager)
+set_broadcast_service(broadcast_service)
 
 
 @asynccontextmanager
